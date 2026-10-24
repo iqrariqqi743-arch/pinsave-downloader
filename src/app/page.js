@@ -1,5 +1,9 @@
 "use client";
-
+import {
+  trackImageSearch,
+  trackImageFound,
+  trackDownloadClick,
+} from "@/lib/analytics";
 import { useState } from "react";
 import { useEffect } from "react";
 import { translations } from "@/lib/translations";
@@ -131,6 +135,7 @@ export default function Home() {
     }
 
     setLoading(true);
+    trackImageSearch();
 
     try {
       const response = await fetch("/api/pinterest", {
@@ -151,6 +156,7 @@ export default function Home() {
 
       try {
         data = JSON.parse(responseText);
+        trackImageFound();
       } catch {
         throw new Error(t.invalidResponse);
       }
@@ -427,6 +433,7 @@ export default function Home() {
 
                 <a
                   href={image.downloadUrl}
+                  onClick={trackDownloadClick}
                   className="mt-5 flex h-14 w-full items-center justify-center gap-2 rounded-2xl bg-slate-950 font-extrabold text-white transition hover:bg-rose-600"
                 >
                   <Download size={20} />
